@@ -1,3 +1,3 @@
 ﻿  Main.cpp
-C:\Users\diego\source\repos\Project-COVID-27\Project-COVID-27\Main.cpp(13,12): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
-  Project-COVID-27.vcxproj -> C:\Users\diego\source\repos\Project-COVID-27\Debug\Project-COVID-27.exe
+C:\Users\DiegoMJ\Documents\GitHub\Project_COVID-27\Project-COVID-27\Main.cpp(15,12): warning C4244:  'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+  Project-COVID-27.vcxproj -> C:\Users\DiegoMJ\Documents\GitHub\Project_COVID-27\Debug\Project-COVID-27.exe
