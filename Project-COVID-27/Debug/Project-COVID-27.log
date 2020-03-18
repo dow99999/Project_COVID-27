@@ -1,3 +1,7 @@
 ﻿  Main.cpp
-C:\Users\DiegoMJ\Documents\GitHub\Project_COVID-27\Project-COVID-27\Main.cpp(15,12): warning C4244:  'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\DiegoMJ\Documents\GitHub\Project_COVID-27\Project-COVID-27\Main.cpp(37,12): warning C4244:  '=': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\DiegoMJ\Documents\GitHub\Project_COVID-27\Project-COVID-27\Main.cpp(39,12): warning C4244:  '=': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\DiegoMJ\Documents\GitHub\Project_COVID-27\Project-COVID-27\Main.cpp(122,12): warning C4244:  'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\DiegoMJ\Documents\GitHub\Project_COVID-27\Project-COVID-27\Main.cpp(135,27): warning C4244:  'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
+C:\Users\DiegoMJ\Documents\GitHub\Project_COVID-27\Project-COVID-27\Main.cpp(135,21): warning C4244:  'inicializando': conversión de 'double' a 'const int'; posible pérdida de datos
   Project-COVID-27.vcxproj -> C:\Users\DiegoMJ\Documents\GitHub\Project_COVID-27\Debug\Project-COVID-27.exe
