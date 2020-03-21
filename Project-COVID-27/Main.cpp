@@ -4,9 +4,11 @@
 #include <list>
 
 #include "SDL/include/SDL.h"
+#include "SDL/include/SDL_mixer.h"
 
 #pragma comment(lib, "SDL/x86/SDL2.lib")
 #pragma comment(lib, "SDL/x86/SDL2main.lib")
+#pragma comment(lib, "SDL/x86/SDL2_mixer.lib")
 
 //de momento meto un define, ya se cambiara por un const
 
@@ -125,11 +127,25 @@ void draw(SDL_Rect &r, SDL_Rect &f, std::list<Bullet*> &bullets, SDL_Surface* sc
 	SDL_FillRect(screenSurface, &f, SDL_MapRGB(screenSurface->format, 0xFF, 0x88, 0x00));
 }
 
+void quit() {
+	Mix_Quit();
+	SDL_Quit();
+}
+
 int main(int argc, char* argv[]) {
-	//SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	srand(time(NULL));
 
 	bool bucle = true;
+
+	//Initialize SDL_mixer
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+
+	Mix_Music* bg_m = Mix_LoadMUS("sounds/bg_music.mp3");
+	Mix_Chunk* pew = Mix_LoadWAV("sounds/pew.wav");
+	Mix_Chunk* wee = Mix_LoadWAV("sounds/wee.wav");
+	Mix_Chunk* white = Mix_LoadWAV("sounds/white.mp3");
+	//std::cout << Mix_GetError() << std::endl;
 
 	int x = 1280;
 	int y = 720;
@@ -154,6 +170,9 @@ int main(int argc, char* argv[]) {
 	SDL_Rect r = { x / 2 - 50, y / 2 - 50, 100, 100 };
 	SDL_Rect f = { 0, 0, 50, 50 };
 
+	Mix_PlayMusic(bg_m, -1);
+	Mix_PlayChannel(6, white, -1);
+	Mix_Pause(6);
 	while (bucle) {
 		SDL_Surface* screenSurface = SDL_GetWindowSurface(window);
 		
@@ -216,10 +235,26 @@ int main(int argc, char* argv[]) {
 			r.y = 1;
 		}
 
+		if (areTouching(r, f)) { //ahora si el follower te toca te bufa
+			ready = 0;
+			if(!Mix_PausedMusic())
+				Mix_PauseMusic();
+			if(Mix_Paused(6))
+				Mix_Resume(6);
+		} else {
+			if(!Mix_Paused(6))
+				Mix_Pause(6);
+			if(Mix_PausedMusic())
+				Mix_ResumeMusic();
+		}
+
 		ready--;
-		if (fire && ready < 0 && !areTouching(f,r)) { //disparos deshabilitados si el follower te esta tocando
+		if (fire && ready < 0) {
 			ready = t_wait;
 			Bullet* blt_aux = new Bullet;
+			Mix_PlayChannel(-1, pew, 0);
+			//std::cout << Mix_GetError() << std::endl;
+			
 			blt_aux->blt = { r.x + r.w / 2 - 5, r.y + r.h / 2 - 5, 10, 10 }; //tamanos de bala hardcodeados
 
 			//caso en que este quieto el usuario
@@ -240,6 +275,7 @@ int main(int argc, char* argv[]) {
 		//follower
 		f.x += fdx;
 		f.y += fdy;
+		
 
 		//gestion de cada bala
 		for (std::list<Bullet*>::iterator it = bullets.begin(); it != bullets.end(); it++) {
@@ -254,7 +290,8 @@ int main(int argc, char* argv[]) {
 
 			if (aux->y > 0 - aux->h && aux->y < y) {
 				aux->y += (*it)->by;
-				if (areTouching((*aux), f)) { 
+				if (areTouching((*aux), f) && !areTouching(r, f)) {
+					Mix_PlayChannel(-1, wee, 0);
 					switch (rand() % 4) {
 					case 0:
 						f.x = 0;
@@ -297,6 +334,14 @@ int main(int argc, char* argv[]) {
 		SDL_UpdateWindowSurface(window);
 	}
 
-	SDL_Quit();
+	//cleanup
+	for (Bullet* a : bullets) {
+		delete a;
+	}
+	Mix_FreeChunk(pew);
+	Mix_FreeChunk(wee);
+	Mix_FreeChunk(white);
+	Mix_FreeMusic(bg_m);
+	quit();
 	return 0;
 }
